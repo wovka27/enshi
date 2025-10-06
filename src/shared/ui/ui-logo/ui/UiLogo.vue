@@ -1,0 +1,69 @@
+<script setup lang="ts">
+  interface ILogoProps {
+    color?: 'gray' | 'purple';
+    /**
+     * @desc Пример - 1,2,3,4,5,6,7,8,9,10 - значение будет умножено на 10
+     */
+    size?: number;
+  }
+
+  withDefaults(defineProps<ILogoProps>(), { color: 'gray', size: 6 });
+</script>
+
+<template>
+  <div
+    class="UiLogo"
+    :data-color="color"
+    :style="{ '--size': size * 10 + 'px' }"
+  >
+    <svg
+      class="UiLogo__logo"
+      viewBox="0 0 28 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 14C0 12.03 0.37 10.2 1.09 8.5C1.82 6.79 2.82 5.32 4.1 4.05C5.38 2.79 6.84 1.81 8.53 1.09C10.21 0.36 12.01 0 13.94 0C15.87 0 17.69 0.36 19.4 1.09C21.11 1.81 22.61 2.81 23.89 4.05C25.17 5.32 26.17 6.79 26.9 8.5C27.62 10.2 28 12.03 28 14C28 15.02 27.89 15.99 27.67 16.89C26.47 16.39 25.22 16.02 23.92 15.8C22.63 15.59 21.35 15.48 20.07 15.48C18.46 15.48 16.89 15.65 15.33 15.97C13.79 16.29 12.26 16.85 10.76 17.6L10.76 13.19C13.65 12.13 16.61 11.6 19.68 11.6C20.27 11.6 20.84 11.62 21.41 11.67C21.98 11.7 22.55 11.76 23.14 11.83C22.87 10.71 22.46 9.7 21.86 8.81C21.25 7.91 20.54 7.16 19.73 6.55C18.91 5.93 18 5.45 17 5.1C15.99 4.76 14.97 4.58 13.96 4.58C12.68 4.58 11.47 4.82 10.35 5.32C9.22 5.81 8.23 6.47 7.4 7.3C6.57 8.13 5.89 9.13 5.38 10.3C4.87 11.47 4.59 12.7 4.59 14C4.59 15.31 4.85 16.54 5.36 17.68C5.87 18.83 6.55 19.83 7.41 20.68C8.28 21.54 9.27 22.2 10.39 22.66C11.52 23.14 12.71 23.37 13.94 23.37C15.04 23.37 16.07 23.2 17.06 22.87C18.04 22.55 18.95 22.04 19.79 21.35C20.34 21.94 20.87 22.52 21.41 23.09C21.93 23.67 22.46 24.27 22.97 24.89C21.69 25.9 20.28 26.67 18.72 27.21C17.18 27.73 15.58 28 13.94 28C12.2 28 10.52 27.69 8.94 27.07C7.35 26.46 5.95 25.6 4.7 24.49C3.47 23.38 2.43 22.08 1.63 20.6C0.84 19.11 0.33 17.49 0.12 15.74C0.04 15.45 0.01 15.16 0.01 14.86C0 14.59 0 14.29 0 14Z"
+        fill="#FFF"
+        fill-opacity="1"
+        fill-rule="nonzero"
+      />
+    </svg>
+  </div>
+</template>
+
+<style lang="scss">
+  .UiLogo {
+    @include flex-center();
+
+    --default-size-value: 60;
+    --size: calc(var(--default-size-value) * 1px);
+    --logo-scale: calc(28 / var(--default-size-value));
+    --radius-scale: calc(10 / var(--default-size-value));
+
+    flex-shrink: 0;
+    aspect-ratio: 1;
+    width: var(--size);
+    background-color: var(--color);
+    border-radius: calc(var(--size) * var(--radius-scale));
+
+    &__logo {
+      width: calc(100% * var(--logo-scale));
+      aspect-ratio: 1;
+
+      path {
+        fill: var(--color-logo);
+      }
+    }
+
+    &[data-color='purple'] {
+      --color: var(--color-purple-8c);
+      --color-logo: var(--color-white);
+    }
+
+    &[data-color='gray'] {
+      --color: var(--color-dark-34);
+      --color-logo: var(--color-gray-82);
+    }
+  }
+</style>
