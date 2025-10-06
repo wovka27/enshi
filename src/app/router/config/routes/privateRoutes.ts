@@ -6,6 +6,7 @@ export const privateRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: ':id(\\d+)/profile',
+        name: 'profile',
         component: () => import('@/views/profile'),
         meta: {
           requiresAuth: true,

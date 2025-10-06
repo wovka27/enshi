@@ -7,6 +7,7 @@ export interface IAnimeCardProps {
   title: string;
   year: string | number;
   genre?: string[];
+  anime_genres: string[] | string | null;
   size?: 'medium' | 'large';
   id?: string;
 }

@@ -1,20 +1,45 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, ref, watch } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
   import AnimeCardList from '@features/anime-card-list';
   import { useUserStore } from '@entities/user/model';
 
+  const route = useRoute();
+  const router = useRouter();
   const userStore = useUserStore();
 
   const activeTab = ref('favorites');
 
-  userStore.getFavorites();
+  const avatar = computed(() => userStore.user?.avatar || '');
+  const cover = computed(() => userStore.user?.cover || '');
+  const isAuthUser = computed(() => userStore.localUser?.id == userStore.user?.id);
+
+  const tabs = [{ label: 'Избранное', value: 'favorites' }];
+
+  const logout = () => {
+    userStore.logout();
+    router.push('/login');
+  };
+
+  watch(
+    () => route.params.id,
+    () => {
+      userStore.getFavorites();
+      userStore.getStats(+route.params.id);
+      userStore.getData(+route.params.id);
+    },
+    { immediate: true }
+  );
 </script>
 
 <template>
-  <div class="AccountView">
+  <div
+    v-if="userStore.user"
+    class="AccountView"
+  >
     <div class="AccountView__cover">
       <UiImage
-        :src="userStore.user?.cover"
+        :src="cover"
         error-src="/images/account_cover_example.png"
         alt="bg"
       />
@@ -25,7 +50,7 @@
           <UiImage
             width="130"
             height="130"
-            :src="userStore.user?.avatar"
+            :src="avatar"
             alt="user"
           />
         </div>
@@ -40,12 +65,15 @@
           <div
             v-if="userStore.user?.rank"
             inert
-            class="primary-color-container"
+            class="AccountView__rank"
           >
             {{ userStore.user?.rank }}
           </div>
         </div>
-        <div class="AccountView__userBtns">
+        <div
+          v-if="isAuthUser"
+          class="AccountView__userBtns"
+        >
           <div class="AccountView__userBtn AccountView__userBtn_stat block-container">
             <svg
               data-v-580a597d=""
@@ -77,6 +105,7 @@
           <UiIconButton
             :size="40"
             icon-name="logout"
+            @click="userStore.logout"
           />
         </div>
       </div>
@@ -87,14 +116,23 @@
         <div style="width: 100%">
           <div class="AccountView__StatsItem">
             <p class="AccountView__StatsTitle">Статистика</p>
-            <p class="AccountView__StatsItemText">В избранном</p>
+            <p class="AccountView__StatsItemText">
+              В избранном
+              <span>{{ userStore.stats?.coun_favorites || 0 }}</span>
+            </p>
           </div>
           <i class="line"></i>
 
           <div class="AccountView__StatsItem">
             <p class="AccountView__StatsTitle">Всего</p>
-            <p class="AccountView__StatsItemText">Оценок</p>
-            <p class="AccountView__StatsItemText">Комментариев</p>
+            <p class="AccountView__StatsItemText">
+              Оценок
+              <span>{{ userStore.stats?.coun_estimations || 0 }}</span>
+            </p>
+            <p class="AccountView__StatsItemText">
+              Комментариев
+              <span>{{ userStore.stats?.coun_comments || 0 }}</span>
+            </p>
           </div>
         </div>
         <!--        <div-->
@@ -103,14 +141,15 @@
       </div>
       <div class="AccountView__tabsContainer block-container">
         <UiTabs
+          v-if="isAuthUser"
           v-model="activeTab"
           theme="dark"
-          :tabs="[
-            { label: 'Избранное', value: 'favorites' },
-            { label: 'Достижения', value: 'achievements' },
-          ]"
+          :tabs="tabs"
         />
-        <div class="AccountView__favoriteList">
+        <div
+          v-if="isAuthUser"
+          class="AccountView__favoriteList"
+        >
           <AnimeCardList :data="userStore.favoriteAnimeList" />
         </div>
       </div>
@@ -119,11 +158,17 @@
 </template>
 
 <style lang="scss">
+  .AccountView__rank {
+    color: var(--color-white);
+    padding: 6px 16px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, rgba(140, 83, 253, 1), rgba(83.55731964111328, 49.53755187988281, 151, 1) 70%);
+  }
   .line {
     width: 100%;
     height: 0;
     display: block;
-    border: 1.5px solid rgba(130, 130, 130, 0.2);
+    border: var(--border) var(--color-gray-82-20);
     margin: 60px 0;
   }
   .AccountView__StatsItemText {
@@ -151,11 +196,13 @@
   }
 
   .AccountView__user {
+    background-color: var(--theme-block-bg);
     padding: 30px;
     height: fluid(359, 250);
     max-width: 100%;
     grid-area: user;
     display: flex;
+    color: var(--theme-text);
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
@@ -235,6 +282,7 @@
   }
 
   .AccountView__Stats {
+    background-color: var(--theme-block-bg);
     height: 359px;
     max-width: 100%;
     grid-area: stats;
@@ -242,6 +290,7 @@
     flex-direction: row;
     align-items: flex-start;
     padding: fluid(30, 20);
+    color: var(--theme-text);
     &.is_hidden {
       display: none;
     }
@@ -270,6 +319,8 @@
   }
 
   .AccountView__tabsContainer {
+    background-color: var(--theme-block-bg);
+
     padding: fluid(30, 20);
     align-items: flex-start;
     justify-content: flex-start;
@@ -279,6 +330,7 @@
   }
 
   .AccountView__cover {
+    position: relative;
     z-index: -1;
     height: fluid(300, 390);
 
@@ -352,6 +404,7 @@
     }
 
     .AccountView__userAvatar {
+      position: relative;
       width: 100px;
       height: 100px;
     }

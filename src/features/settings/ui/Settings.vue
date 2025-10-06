@@ -10,15 +10,6 @@
 
   const userStore = useUserStore();
 
-  function fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
   const [fields, submit] = useFormRequest({
     fields: {
       nickname: userStore.user?.name ?? '',
@@ -66,17 +57,17 @@
         <div class="skeleton-animation Settings__bg"></div>
         <UiImage
           class="Settings__bg"
-          :src="userStore.user?.cover"
+          :src="userStore.localUser?.cover"
           error-src="/images/account_cover_example.png"
         />
         <div class="Settings__headerUser">
           <AccountAvatar
-            :key="userStore.user?.avatar"
-            :src="userStore.user?.avatar"
+            :key="userStore.localUser?.avatar"
+            :src="userStore.localUser?.avatar"
           />
           <div class="Settings__headerUserInfo">
-            <p class>{{ userStore.user?.name }}</p>
-            <p class>{{ userStore.user?.email }}</p>
+            <p class>{{ userStore.localUser?.name }}</p>
+            <p class>{{ userStore.localUser?.email }}</p>
           </div>
         </div>
         <UiButton
@@ -102,7 +93,7 @@
             </div>
             <div class="Settings__bgMini">
               <UiImage
-                :src="userStore.user?.cover ?? fields.cover"
+                :src="userStore.localUser?.cover ?? fields.cover"
                 alt="фон пользователя"
                 error-src="/images/account_cover_example.png"
               />

@@ -24,7 +24,7 @@
     <header>
       <div
         class="LastComments__itemHeaderWrap"
-        @click.stop="router.push({ name: 'account', params: { id: data.user_id } })"
+        @click.stop="router.push({ name: 'profile', params: { id: data.user_id } })"
       >
         <picture class="LastComments__itemAvatar">
           <UiImage

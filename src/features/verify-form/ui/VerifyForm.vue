@@ -18,7 +18,7 @@
     });
 
     if (response.ok) {
-      user.setUser(response.data.data.user);
+      user.setLocalUser(response.data.data.user);
       user.setToken(response.data.data.access_token);
 
       const redirect = router.currentRoute.value.query.redirect as string;

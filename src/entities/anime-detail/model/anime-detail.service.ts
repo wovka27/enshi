@@ -66,6 +66,20 @@ class AnimeDetailService {
           prev_page_url: null,
         },
       },
+      transform: (data) => ({
+        ...data,
+        data: data.data.map((i) => ({
+          ...i,
+          anime: {
+            ...i.anime,
+            anime_genres: Array.isArray(i.anime.anime_genres)
+              ? i.anime.anime_genres
+              : typeof i.anime.anime_genres === 'string' || i.anime.anime_genres?.length === 1
+                ? []
+                : JSON.parse(i.anime.anime_genres),
+          },
+        })),
+      }),
     });
 
     return response.data;

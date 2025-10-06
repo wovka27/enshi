@@ -19,3 +19,20 @@ export interface IUserRolePivot {
   model_id: number;
   role_id: number;
 }
+
+export interface IUserStats extends Omit<IEntity, 'name'> {
+  user_id: number;
+  coun_comments: number;
+  coun_favorites: number;
+  coun_estimations: number;
+}
+
+export interface IUserResponse extends Pick<IEntity, 'id' | 'name'> {
+  success: true;
+  message: string;
+  data: {
+    avatar: string;
+    cover: string;
+    rank: string;
+  };
+}

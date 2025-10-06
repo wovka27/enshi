@@ -35,7 +35,8 @@
     }
 
     if (response.ok && response.data.success) {
-      user.setUser(response.data.data.user);
+      console.log('hui');
+      user.setLocalUser(response.data.data.user);
       user.setToken(response.data.data.access_token);
 
       if (router.currentRoute.value.query?.redirect) {

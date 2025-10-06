@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import animeDetailService from '@entities/anime-detail/model/anime-detail.service.ts';
 import type { IFavorite } from '@entities/favorite/model';
 import { storageUser } from '@entities/user/lib/storageUser.ts';
-import type { IUser } from '@entities/user/model/types.ts';
+import type { IUser, IUserStats } from '@entities/user/model/types.ts';
 import userService from '@entities/user/model/user.service.ts';
 import CookieHelper from '@shared/lib/cookie';
 
@@ -10,6 +10,8 @@ type State = {
   user: IUser | null;
   token: string;
   favorites: IFavorite[];
+  stats: IUserStats | null;
+  localUser: IUser | null;
 };
 
 export const useUserStore = defineStore('user', {
@@ -17,6 +19,8 @@ export const useUserStore = defineStore('user', {
     user: null,
     token: '',
     favorites: [],
+    stats: null,
+    localUser: storageUser.get(),
   }),
 
   getters: {
@@ -29,6 +33,10 @@ export const useUserStore = defineStore('user', {
   actions: {
     setUser(data: IUser) {
       this.user = data;
+      storageUser.set(data);
+    },
+    setLocalUser(data: IUser) {
+      this.localUser = data;
       storageUser.set(data);
     },
 
@@ -51,21 +59,29 @@ export const useUserStore = defineStore('user', {
       const u = storageUser.get();
 
       if (t) this.setToken(t);
-      if (u) this.setUser(u);
+      if (u) this.setLocalUser(u);
 
-      if (t && !u) await this.getData();
+      if (t && !u) await this.getData(this.localUser?.id);
     },
 
-    async getData() {
-      if (this.user) return;
-
-      this.user = await userService.getData();
+    async getData(id: number) {
+      if (this.user?.id == id) return;
+      const response = await userService.getData(id);
+      this.user = response!;
     },
 
     async getFavorites() {
       const response = await animeDetailService.getFavorites();
 
       this.favorites = response!.data;
+
+      console.log(this.favorites);
+    },
+
+    async getStats(id: number) {
+      const response = await userService.getStats(id);
+
+      this.stats = response!;
     },
 
     logout() {

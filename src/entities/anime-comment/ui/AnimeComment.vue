@@ -38,14 +38,17 @@
       :id="`comment_${data.id}`"
       class="AnimeComment__Avatar"
     >
-      <div class="AnimeComment__img">
+      <router-link
+        :to="{ name: 'profile', params: { id: data.user_id } }"
+        class="AnimeComment__img"
+      >
         <UiImage
           width="56"
           height="56"
           :src="data.user.avatar || ''"
           error-src="/images/AvatarExample.png"
         />
-      </div>
+      </router-link>
       <i></i>
     </div>
     <div class="AnimeComment__content">

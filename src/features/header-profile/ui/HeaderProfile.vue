@@ -6,16 +6,16 @@
 
 <template>
   <router-link
-    :to="`/user/${userStore.user?.id}/profile`"
+    :to="`/user/${userStore.localUser?.id}/profile`"
     class="AppHeader__button AppHeader__button--forAuthorized block-container hidden-mobile-s"
   >
     <div class="img-container">
       <UiImage
-        :src="userStore.user?.avatar"
+        :src="userStore.localUser?.avatar"
         error-src="/images/AvatarExample.png"
       />
     </div>
-    <span v-if="userStore.user?.name">{{ userStore.user?.name }}</span>
+    <span v-if="userStore.localUser?.name">{{ userStore.localUser?.name }}</span>
   </router-link>
 </template>
 

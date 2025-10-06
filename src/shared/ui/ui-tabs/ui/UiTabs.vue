@@ -104,7 +104,7 @@
       padding-bottom: 10px;
       display: flex;
       position: relative;
-      border-bottom: 1px solid var(--tabs-border);
+      border-bottom: 1px solid var(--color-gray-82-20);
       column-gap: 40px;
       overflow-x: auto;
       @include hide-scroll();
@@ -113,7 +113,6 @@
     &__item {
       position: relative;
       background: transparent;
-      color: var(--tabs-text);
       font-weight: 500;
       font-size: 15px;
       padding: 5px 0 12px;
@@ -121,9 +120,10 @@
       cursor: pointer;
       transition: color 0.25s ease;
       white-space: nowrap;
+      color: var(--theme-text);
 
       &.is-active {
-        color: var(--tabs-active);
+        font-weight: var(--font-weight-600);
       }
 
       &:hover:not(.is-active) {
@@ -135,27 +135,11 @@
       position: absolute;
       bottom: 0;
       height: 2px;
-      background: var(--tabs-indicator);
+      background: var(--theme-text);
       border-radius: 2px;
       transition:
         transform 0.3s ease,
         width 0.3s ease;
-    }
-
-    &.dark {
-      --tabs-border: #2a2a2a;
-      --tabs-text: #8c8c8c;
-      --tabs-hover: #aaa;
-      --tabs-active: #fff;
-      --tabs-indicator: #888;
-    }
-
-    &.light {
-      --tabs-border: #dcdcdc;
-      --tabs-text: #666;
-      --tabs-hover: #333;
-      --tabs-active: #000;
-      --tabs-indicator: #000;
     }
   }
 </style>

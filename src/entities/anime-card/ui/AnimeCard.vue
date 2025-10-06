@@ -12,7 +12,7 @@
   const props = defineProps<IAnimeCardDefaultProps>();
 
   const meta = computed(() => {
-    const genre = props.data.genre || [];
+    const genre = props.data.genre || props.data.anime_genres || [];
 
     return {
       year: String(props.data.year || ''),

@@ -2,4 +2,6 @@
   import Settings from '@features/settings/ui/Settings.vue';
 </script>
 
-<template><Settings /></template>
+<template>
+  <Settings />
+</template>
