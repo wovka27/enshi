@@ -37,7 +37,7 @@
   >
     <button
       class="quality-btn"
-      @click.prevent="isOpen = !isOpen"
+      @click.stop="isOpen = !isOpen"
     >
       {{ currentLabel }}
     </button>
@@ -53,7 +53,6 @@
             <svg
               viewBox="0 0 44 44"
               xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
               width="44.000000"
               height="44.000000"
               fill="none"

@@ -10,7 +10,7 @@ interface State {
   data: IAnimeDetail | null;
   episodes: IEpisode[];
   allEpisodes: unknown[];
-  voices: { value: string; label: string }[];
+  voices: { value: number; label: string }[];
   selectedPlayerType: 'kodik' | 'enshi';
   selectedVoiceType: number | null;
   selectedEpisode: IEpisode | null;

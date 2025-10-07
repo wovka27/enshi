@@ -33,7 +33,7 @@
 </script>
 
 <template>
-  <div class="AnimeComment">
+  <div class="AnimeComment AnimeComment--root">
     <div
       :id="`comment_${data.id}`"
       class="AnimeComment__Avatar"
@@ -133,7 +133,7 @@
     height: inherit;
     padding-bottom: 20px;
 
-    &:last-child {
+    &.AnimeComment--root &:last-child {
       &:has(.AnimeComment__answer-field) i {
         display: initial;
       }
