@@ -77,6 +77,10 @@
       aspect-ratio: 1;
       border-radius: 50%;
       background-color: var(--color-purple-8c);
+
+      @include mobile-s {
+        width: 50px;
+      }
       @include hover {
         svg {
           scale: 1.1;

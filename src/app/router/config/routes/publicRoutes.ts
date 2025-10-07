@@ -7,7 +7,6 @@ export const publicRoutes: RouteRecordRaw[] = [
     name: 'home',
     component: () => import('@/views/main'),
     meta: {
-      requiresAuth: false,
       layout: true,
       title: 'Смотреть аниме онлайн',
       nlmt: true,
@@ -21,7 +20,6 @@ export const publicRoutes: RouteRecordRaw[] = [
     },
     beforeEnter: createCatalogGuard,
     meta: {
-      requiresAuth: false,
       layout: true,
       title: 'Каталог',
     },
@@ -32,7 +30,6 @@ export const publicRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/anime-detail'),
     beforeEnter: createAnimeDetailGuard,
     meta: {
-      requiresAuth: false,
       layout: true,
       title: 'Просмотр',
       nlmt: true,

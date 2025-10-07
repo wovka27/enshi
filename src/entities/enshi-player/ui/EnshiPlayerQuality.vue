@@ -119,6 +119,13 @@
     cursor: pointer;
     border: none;
     font-weight: 500;
+
+    @include mobile-s {
+      font-size: 15px;
+      padding: 8px 10px;
+      top: 20px;
+      right: 10px;
+    }
   }
 
   .quality-dropdown {

@@ -25,4 +25,11 @@
       @include flex-center();
     }
   }
+
+  .block-container {
+    outline: none;
+    border: 1px solid var(--color-gray-82-20);
+    border-radius: 10px;
+    background: var(--theme-block-bg);
+  }
 </style>

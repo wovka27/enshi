@@ -76,14 +76,13 @@
 
     &.is-selected {
       border-color: var(--color-gray-82);
-      color: var(--color-white);
-      background-color: var(--color-dark-1f);
+      color: var(--theme-text);
+      background-color: var(--theme-block-bg);
       box-shadow: 0 0 8px var(--color-gray-82-20);
     }
 
     &:not(.is-selected):hover:not(.disabled) {
       border-color: var(--color-gray-82);
-      color: var(--color-white-40);
     }
 
     &.disabled {

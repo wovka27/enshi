@@ -69,7 +69,7 @@
     color: var(--color-gray-9b);
   }
   .AnimeMeta__text-value {
-    color: var(--theme-text);
+    color: var(--color-white);
     display: -webkit-box;
     white-space: nowrap;
     line-clamp: 1;

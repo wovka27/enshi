@@ -6,105 +6,60 @@
 
 <template>
   <router-link
+    v-if="userStore.isAuth"
     :to="`/user/${userStore.localUser?.id}/profile`"
-    class="AppHeader__button AppHeader__button--forAuthorized block-container hidden-mobile-s"
+    class="HeaderProfile hidden-mobile-s"
   >
-    <div class="img-container">
+    <div class="HeaderProfile__img-container">
       <UiImage
+        width="48"
+        height="48"
         :src="userStore.localUser?.avatar"
         error-src="/images/AvatarExample.png"
       />
     </div>
-    <span v-if="userStore.localUser?.name">{{ userStore.localUser?.name }}</span>
+    <span
+      v-if="userStore.localUser?.name"
+      class="HeaderProfile__name"
+    >
+      {{ userStore.localUser?.name }}
+    </span>
   </router-link>
+  <UiButton
+    v-else
+    :to="{ name: 'login' }"
+    btn-type="outline-small"
+    w-content
+  >
+    Войти
+  </UiButton>
 </template>
 
 <style lang="scss">
-  @use 'sass:color';
-  .AppHeader__button {
-    flex-shrink: 0;
-    display: flex;
-    position: relative;
-    &--forAuthorized {
-      overflow: hidden;
-      padding: 0;
-      border: none;
-      display: flex;
-      flex-shrink: 0;
-
-      .img-container {
-        position: relative;
-        flex-shrink: 0;
-        width: 48px;
-        height: auto;
-        overflow: hidden;
-        img {
-          width: 100%;
-          height: 110%;
-          object-fit: cover;
-          flex-shrink: 0;
-        }
-      }
-
-      @include hover {
-        background: color.adjust(rgb(31, 30, 35), $lightness: 10%);
-        img {
-          scale: 1.1;
-        }
-      }
-
-      img {
-        transition: scale 0.2s ease-in-out;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-      }
-
-      span {
-        @include flex-center();
-
-        padding: 0 20px;
-        width: 100%;
-        height: 100%;
-        font-size: 16px;
-        font-weight: 600;
-        line-height: 20px;
-        border-top: 1px solid var(--color-gray-82-20);
-        border-right: 1px solid var(--color-gray-82-20);
-        border-bottom: 1px solid var(--color-gray-82-20);
-        border-radius: 10px;
-      }
-    }
-
-    &:not(&--forAuthorized, &--noAuthorized) {
-      width: 48px;
-    }
-
-    height: 48px;
-    cursor: pointer;
-    outline: none;
-    @include flex-center();
-    @include hover {
-      background: color.adjust(rgb(31, 30, 35), $lightness: 10%);
-      &--forAuthorized img {
-        scale: 1.1;
-      }
-    }
-    transition: background 0.2s ease-in-out;
-  }
-
-  .block-container {
-    outline: none;
+  .HeaderProfile {
     border: 1px solid var(--color-gray-82-20);
     border-radius: 10px;
-    background: var(--theme-block-bg);
-  }
+    background: var(--color-dark-1f);
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    font-size: 16px;
+    font-weight: var(--font-weight-600);
+    align-items: center;
+    &__name {
+      padding: 10px 20px;
+      flex: 1;
+    }
 
-  @media screen and (max-width: 1200px) {
-    .AppHeader__button--forAuthorized {
-      span {
-        display: none;
+    @include hover {
+      border-color: var(--color-gray-82);
+    }
+
+    @media screen and (max-width: 900px) {
+      & {
+        &__name {
+          display: none;
+        }
       }
     }
   }

@@ -95,7 +95,6 @@
   </form>
   <UiDropdown
     v-model="isOpen"
-    :width="320"
     is-full-width
     :target="formRef"
     :is-drop-header="isDropHeader"

@@ -50,7 +50,7 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
   }),
 
   getters: {
-    currentEpisode: (state: State) => state.episodes[state.episodeIndex],
+    currentEpisode: (state: State) => state.episodes[state.episodeIndex % state.episodes.length],
   },
 
   actions: {
@@ -69,6 +69,13 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
     },
     setEpisodeIndex(val: number) {
       this.episodeIndex = val;
+      this.setSelectedEpisode(this.currentEpisode);
+    },
+    nextEpisode() {
+      this.setEpisodeIndex(this.episodeIndex + 1);
+    },
+    prevEpisode() {
+      this.setEpisodeIndex(this.episodeIndex - 1);
     },
     async getData(id: string) {
       this.data = await animeDetailService.getData(id);
@@ -92,7 +99,7 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
     },
     async getEpisodes(id: number, voice_id: number) {
       this.episodes = await animeDetailService.getEpisodes(id, voice_id);
-      this.setSelectedEpisode(this.episodes[0]);
+      this.setSelectedEpisode(this.currentEpisode);
     },
     async getAllEpisodes() {
       const videoStore = useVideoStore();

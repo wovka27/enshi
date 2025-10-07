@@ -57,40 +57,35 @@
 <template>
   <div
     ref="wrapperRef"
-    class="volume-control"
+    class="volume-control hidden-mobile-s"
   >
     <button
       class="volume-control__btn"
       @click="toggle"
     >
-      <UiIcon
-        :name="icon"
-        :width="40"
-      />
+      <UiIcon :name="icon" />
     </button>
 
-    <transition name="slide-up">
+    <div
+      v-if="isOpen"
+      class="volume-control__slider-wrap"
+    >
       <div
-        v-if="isOpen"
-        class="volume-control__slider-wrap"
+        ref="sliderRef"
+        class="slider"
+        @mousedown="startDrag"
       >
+        <div class="slider__track"></div>
         <div
-          ref="sliderRef"
-          class="slider"
-          @mousedown="startDrag"
-        >
-          <div class="slider__track"></div>
-          <div
-            class="slider__fill"
-            :style="{ height: volume * 100 + '%' }"
-          ></div>
-          <div
-            class="slider__thumb"
-            :style="{ bottom: volume * 100 + '%' }"
-          ></div>
-        </div>
+          class="slider__fill"
+          :style="{ height: volume * 100 + '%' }"
+        ></div>
+        <div
+          class="slider__thumb"
+          :style="{ bottom: volume * 100 + '%' }"
+        ></div>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
@@ -100,10 +95,15 @@
     display: inline-block;
 
     &__btn {
+      width: 48px;
+      display: block;
       background: none;
       border: none;
       cursor: pointer;
       padding: 0;
+      svg {
+        width: inherit;
+      }
     }
 
     &__slider-wrap {

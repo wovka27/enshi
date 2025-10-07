@@ -9,7 +9,6 @@
   const videoStore = useVideoStore();
 
   const playerRef = ref(null);
-  const index = ref(0);
 
   const url = computed(
     () => animeDetailStore.allEpisodes.find((i) => i.quality.name === videoStore.currentQuality)?.series_url ?? ''
@@ -21,9 +20,7 @@
   }));
 
   const handleEnd = () => {
-    setTimeout(() => {
-      playerRef.value?.value?.ref.play();
-    }, 1000);
+    animeDetailStore.nextEpisode();
   };
 </script>
 
@@ -36,13 +33,15 @@
         :src="url"
         :meta="meta"
         :quality-options="videoStore.qualities"
+        @next="animeDetailStore.nextEpisode"
+        @prev="animeDetailStore.prevEpisode"
         @end="handleEnd"
       />
     </div>
     <EnshiPlayerEpisodeList
-      :model-value="animeDetailStore.selectedEpisode"
+      :model-value="animeDetailStore.episodeIndex"
       :episodes="animeDetailStore.episodes"
-      @update:model-value="animeDetailStore.setSelectedEpisode"
+      @update:model-value="animeDetailStore.setEpisodeIndex"
     />
   </div>
 </template>

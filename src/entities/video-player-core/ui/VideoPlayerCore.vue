@@ -44,6 +44,8 @@
     (event: 'update:state', value: IVideoPlayerState): void;
     (event: 'fullscreen-change', value: boolean): void;
     (event: 'volume-change', value: Event): void;
+    (event: 'can-play'): void;
+    (event: 'loaded-data'): void;
 
     // HLS lifecycle
     (event: 'hls-manifest-loading'): void;
@@ -245,6 +247,7 @@
 
     emit('hls-manifest-parsed', data, qualities);
     emit('levels', data.levels);
+    loading.value = false;
   };
   const BUFFER_APPENDING = () => {
     emit('hls-buffer-appending');
@@ -584,6 +587,11 @@
     // Когда браузер может воспроизводить — снимаем флаг буфера
     isBuffering.value = false;
     syncEmit();
+    emit('can-play');
+  };
+  const onLoadedData = () => {
+    emit('loaded-data');
+    loading.value = false;
   };
   const onPlay = () => {
     isPlaying.value = true;
@@ -672,6 +680,7 @@
   watch(
     () => props.src,
     (newSrc) => {
+      loading.value = true;
       const myId = generateId();
       currentInstance = myId;
 
@@ -745,6 +754,7 @@
       @seeking="onSeeking"
       @seeked="onSeeked"
       @canplay="onCanPlay"
+      @loadeddata="onLoadedData"
     />
 
     <slot

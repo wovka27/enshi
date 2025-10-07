@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, nextTick, onUnmounted, onUpdated, ref } from 'vue';
   import { useVideoStore } from '@entities/enshi-player/model/enshi-player.store.ts';
   import EnshiPlayerControls from '@entities/enshi-player/ui/EnshiPlayerControls.vue';
   import EnshiPlayerQuality from '@entities/enshi-player/ui/EnshiPlayerQuality.vue';
@@ -18,13 +18,13 @@
     };
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     poster: '',
     autoplay: false,
     storageKeyPrefix: 'video-player-core:',
   });
 
-  defineEmits<{
+  const emit = defineEmits<{
     (event: 'end'): void;
     (event: 'next'): void;
     (event: 'prev'): void;
@@ -37,6 +37,12 @@
     text: '',
     timer: undefined,
   });
+
+  const isEnd = ref(false);
+  const qualityIndex = ref(0);
+
+  const qualityValues = computed(() => props.qualityOptions.map((option) => option.value));
+  const currentQualityValue = computed(() => qualityValues.value[qualityIndex.value % qualityValues.value.length]);
 
   const toggleFullscreen = () => {
     playerRef.value?.toggleFullscreen();
@@ -76,15 +82,47 @@
     }, 8000);
   };
 
+  const changeCurrentQuality = () => {
+    if (qualityIndex.value >= qualityValues.value.length - 1) return;
+    qualityIndex.value++;
+    store.setCurrentQuality(currentQualityValue.value);
+  };
+
   const onError = (value: { codeError: string; error: string }) => {
     switch (value.codeError) {
       case 'VIDEO.MEDIA_ERR_SRC_NOT_SUPPORTED':
-        setError('Видео не воспроизводится. <br /> Попробуйте изменить качество видео');
+        changeCurrentQuality();
+        if (qualityIndex.value >= qualityValues.value.length - 1) setError('Видео не воспроизводится');
         break;
       default:
         return;
     }
   };
+
+  const handleEnd = async () => {
+    emit('next');
+    isEnd.value = true;
+  };
+
+  const handleLoadedData = async () => {
+    if (!isEnd.value) return;
+    store.setLoading(true);
+    await nextTick();
+    isEnd.value = false;
+    store.setLoading(false);
+    togglePlay();
+  };
+
+  const handleNext = () => {
+    emit('next');
+  };
+  const handlePrev = () => {
+    emit('prev');
+  };
+
+  onUpdated(() => {
+    qualityIndex.value = 0;
+  });
 
   defineExpose({ value: playerRef });
 </script>
@@ -118,7 +156,8 @@
     @update:muted="store.setMuted"
     @update:is-pip="store.setPip"
     @error="onError"
-    @end="$emit('end')"
+    @loaded-data="handleLoadedData"
+    @end="handleEnd"
   >
     <template #default="{ isControls }">
       <transition name="slide-fade">
@@ -138,8 +177,8 @@
       <EnshiPlayerControls
         :is-show="isControls"
         :meta="meta"
-        @prev="$emit('prev')"
-        @next="$emit('next')"
+        @next="handleNext"
+        @prev="handlePrev"
         @volume="onVolumeChange"
         @toggle-pip="togglePip"
         @toggle-fullscreen="toggleFullscreen"

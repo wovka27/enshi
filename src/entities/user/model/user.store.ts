@@ -25,10 +25,11 @@ export const useUserStore = defineStore('user', {
 
   getters: {
     checkUserAuthenticated: (state) => {
-      return (id: string) => state.user?.id === id;
+      return (id: number) => (state.user?.id ?? 0) === id;
     },
     favoriteAnimeList: (state) => state.favorites.map((i) => i.anime),
     isAuthUser: (state) => state.localUser && state.user && state.localUser.id === state.user.id,
+    isAuth: (state) => !!state.localUser && !!state.token,
   },
 
   actions: {

@@ -53,13 +53,13 @@
 <style lang="scss">
   .EnshiPlayer-controls__footer-actions {
     display: grid;
-    grid-template-columns: 125px 1fr 40px 40px 40px;
+    grid-template-columns: fluid(125, 70) 1fr 40px 40px 40px;
     align-items: center;
     column-gap: 30px;
     pointer-events: auto;
 
     @include mobile-s {
-      grid-template-columns: 1fr 40px 40px;
+      grid-template-columns: fluid(125, 70) 1fr 30px;
       gap: 20px;
     }
   }

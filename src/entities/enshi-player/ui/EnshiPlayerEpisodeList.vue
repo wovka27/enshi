@@ -4,9 +4,7 @@
 
   defineProps<IEnshiPlayerEpisodeListProps>();
 
-  const selectedEpisode = defineModel<object>({
-    default: null,
-  });
+  const model = defineModel<number>({ default: 0 });
 </script>
 
 <template>
@@ -20,9 +18,9 @@
       :key="item.series_number"
       :episode_number="item.series_number"
       :episode_poster="item.poster_url"
-      :not_viewed="selectedEpisode?.series_number !== item.series_number"
-      :is_active="selectedEpisode?.series_number === item.series_number"
-      @click="selectedEpisode = item"
+      :not_viewed="model !== idx"
+      :is_active="model === idx"
+      @click="model = idx"
     />
   </div>
 </template>

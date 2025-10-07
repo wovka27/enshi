@@ -9,13 +9,10 @@
 
 <template>
   <button
-    class="EnshiPlayer-controls__btn EnshiPlayer-controls__btn--pip"
+    class="EnshiPlayer-controls__btn EnshiPlayer-controls__btn--pip hidden-mobile-s"
     @click="$emit('toggle')"
   >
-    <UiIcon
-      width="38"
-      :name="store.isPip ? 'pip-off' : 'pip-on'"
-    />
+    <UiIcon :name="store.isPip ? 'pip-off' : 'pip-on'" />
   </button>
 </template>
 

@@ -7,10 +7,22 @@ export function createAuthGuard(router: Router) {
 
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-    await userStore.check();
+    try {
+      await userStore.check();
+    } catch (error) {
+      console.warn('[AuthGuard] Ошибка проверки пользователя:', error);
+      userStore.logout();
+    }
 
     if (requiresAuth && !userStore.token) {
-      return { path: '/login', query: { redirect: to.fullPath } };
+      return {
+        path: '/login',
+        query: { redirect: to.fullPath },
+      };
+    }
+
+    if (['/login', '/register', '/confirm-code'].includes(to.path) && userStore.token) {
+      return { path: '/' };
     }
 
     return true;

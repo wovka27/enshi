@@ -13,11 +13,7 @@
 
 <style lang="scss">
   .EnshiPlayerDuration {
-    font-size: 21px;
+    font-size: fluid(21, 14);
     font-weight: var(--font-weight-500);
-
-    @include mobile-s {
-      display: none;
-    }
   }
 </style>

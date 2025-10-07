@@ -23,6 +23,8 @@
   const dropdownRef = ref<HTMLElement | null>(null);
   const styles = ref<CSSProperties>({});
 
+  const MOBILE_BREAKPOINT = 768;
+
   const updatePosition = () => {
     if (!props.target || !dropdownRef.value) return;
 
@@ -31,20 +33,23 @@
 
     const { width: targetWidth, left, right, bottom } = rect;
 
-    // === Вычисление ширины ===
     let dropdownWidth: number;
 
     if (props.width === 'full') {
       dropdownWidth = targetWidth;
     } else if (typeof props.width === 'number') {
       dropdownWidth = props.width;
+    } else if (props.isFullWidth) {
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        dropdownWidth = window.innerWidth - 20;
+      } else {
+        dropdownWidth = targetWidth;
+      }
     } else {
-      // Берём реальную ширину, но ограничиваем экраном
       dropdownWidth = dropdownEl.offsetWidth || targetWidth;
       dropdownWidth = Math.min(dropdownWidth, window.innerWidth - 20);
     }
 
-    // === Позиционирование ===
     let computedLeft = left + window.scrollX;
     const computedTop = props.isDropHeader
       ? parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 60
@@ -53,18 +58,15 @@
     const spaceRight = window.innerWidth - (computedLeft + dropdownWidth + 10);
     const spaceLeft = computedLeft - 10;
 
-    // Если не помещается справа — выравниваем по правому краю target
     if (spaceRight < 0 && spaceLeft > 0) {
       computedLeft = right + window.scrollX - dropdownWidth;
     }
 
-    // Если всё равно вылезает за экран влево
     if (computedLeft < 10) {
       computedLeft = 10;
     }
 
-    // === Для мобилок ===
-    if (window.innerWidth <= 768 && props.isFullWidth) {
+    if (props.isFullWidth && window.innerWidth <= MOBILE_BREAKPOINT) {
       styles.value = {
         position: 'fixed',
         top: `${computedTop}px`,
@@ -102,13 +104,16 @@
       if (val) {
         await nextTick();
         updatePosition();
-        window.addEventListener('resize', updatePosition);
-        window.addEventListener('scroll', updatePosition, true);
+
+        // FIX: корректные слушатели
+        window.addEventListener('resize', updatePosition, { passive: true });
+        window.addEventListener('scroll', updatePosition, { passive: true }); // без capture=true
+
         document.addEventListener('mousedown', handleClickOutside);
         emit('open');
       } else {
         window.removeEventListener('resize', updatePosition);
-        window.removeEventListener('scroll', updatePosition, true);
+        window.removeEventListener('scroll', updatePosition);
         document.removeEventListener('mousedown', handleClickOutside);
         emit('close');
       }
@@ -117,7 +122,7 @@
 
   onBeforeUnmount(() => {
     window.removeEventListener('resize', updatePosition);
-    window.removeEventListener('scroll', updatePosition, true);
+    window.removeEventListener('scroll', updatePosition);
     document.removeEventListener('mousedown', handleClickOutside);
   });
 </script>
