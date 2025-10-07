@@ -13,6 +13,7 @@
 
 <template>
   <UiSection
+    v-if="list.length"
     :id="id"
     :title="title"
   >

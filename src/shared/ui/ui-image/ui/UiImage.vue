@@ -33,7 +33,7 @@
     class="skeleton-animation"
   ></div>
   <img
-    v-if="is_error_img"
+    v-if="is_error_img || !src"
     :src="errorSrc"
     draggable="false"
     v-bind="$attrs"

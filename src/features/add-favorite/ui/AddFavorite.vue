@@ -5,7 +5,7 @@
   const animeDetailStore = useAnimeDetailStore();
 
   const textBtn = computed(() => {
-    return !animeDetailStore.hasFavorite ? 'В коллекцию' : 'Добавлено';
+    return !animeDetailStore.hasFavorite ? 'В избранное' : 'В избранном';
   });
 </script>
 
@@ -23,7 +23,7 @@
     <UiButton
       v-if="animeDetailStore.hasFavorite"
       w-content
-      size="small"
+      size="small-icon"
       btn-type="danger"
       @click="animeDetailStore.removeFavorite"
     >

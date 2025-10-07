@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router';
+import { createUserProfileGuard } from '@app/router/config/guards/createUserProfileGuard.ts';
 
 export const privateRoutes: RouteRecordRaw[] = [
   {
@@ -8,6 +9,7 @@ export const privateRoutes: RouteRecordRaw[] = [
         path: ':id(\\d+)/profile',
         name: 'profile',
         component: () => import('@/views/profile'),
+        beforeEnter: createUserProfileGuard,
         meta: {
           requiresAuth: true,
           title: 'Профиль',

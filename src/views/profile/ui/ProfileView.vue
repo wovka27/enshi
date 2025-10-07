@@ -1,35 +1,25 @@
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import AnimeCardList from '@features/anime-card-list';
+  import { ref } from 'vue';
+  import { onBeforeRouteUpdate, useRouter } from 'vue-router';
+  import { createUserProfileGuard } from '@app/router/config/guards/createUserProfileGuard.ts';
+  import UserFavorites from '@features/user-favorites/ui/UserFavorites.vue';
+  import UserStats from '@features/user-stats';
   import { useUserStore } from '@entities/user/model';
 
-  const route = useRoute();
   const router = useRouter();
   const userStore = useUserStore();
 
   const activeTab = ref('favorites');
 
-  const avatar = computed(() => userStore.user?.avatar || '');
-  const cover = computed(() => userStore.user?.cover || '');
-  const isAuthUser = computed(() => userStore.localUser?.id == userStore.user?.id);
-
   const tabs = [{ label: 'Избранное', value: 'favorites' }];
 
   const logout = () => {
     userStore.logout();
-    router.push('/login');
+
+    router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } });
   };
 
-  watch(
-    () => route.params.id,
-    () => {
-      userStore.getFavorites();
-      userStore.getStats(+route.params.id);
-      userStore.getData(+route.params.id);
-    },
-    { immediate: true }
-  );
+  onBeforeRouteUpdate(createUserProfileGuard);
 </script>
 
 <template>
@@ -39,7 +29,7 @@
   >
     <div class="AccountView__cover">
       <UiImage
-        :src="cover"
+        :src="userStore.user?.cover"
         error-src="/images/account_cover_example.png"
         alt="bg"
       />
@@ -50,7 +40,7 @@
           <UiImage
             width="130"
             height="130"
-            :src="avatar"
+            :src="userStore.user?.avatar"
             alt="user"
           />
         </div>
@@ -71,7 +61,7 @@
           </div>
         </div>
         <div
-          v-if="isAuthUser"
+          v-if="userStore.isAuthUser"
           class="AccountView__userBtns"
         >
           <div class="AccountView__userBtn AccountView__userBtn_stat block-container">
@@ -93,65 +83,30 @@
               ></path>
             </svg>
           </div>
-          <router-link
-            to="/user/settings"
-            class="AccountView__userBtn block-container"
-          >
-            <UiIcon
-              :width="40"
-              name="settings"
-            />
-          </router-link>
           <UiIconButton
-            :size="40"
+            is-theme
+            icon-name="settings"
+            class="AccountView__userBtn block-container"
+            @click="router.push('/user/settings')"
+          />
+          <UiIconButton
+            is-theme
             icon-name="logout"
-            @click="userStore.logout"
+            @click="logout"
           />
         </div>
       </div>
-      <div
-        inert
-        class="AccountView__Stats block-container"
-      >
-        <div style="width: 100%">
-          <div class="AccountView__StatsItem">
-            <p class="AccountView__StatsTitle">Статистика</p>
-            <p class="AccountView__StatsItemText">
-              В избранном
-              <span>{{ userStore.stats?.coun_favorites || 0 }}</span>
-            </p>
-          </div>
-          <i class="line"></i>
 
-          <div class="AccountView__StatsItem">
-            <p class="AccountView__StatsTitle">Всего</p>
-            <p class="AccountView__StatsItemText">
-              Оценок
-              <span>{{ userStore.stats?.coun_estimations || 0 }}</span>
-            </p>
-            <p class="AccountView__StatsItemText">
-              Комментариев
-              <span>{{ userStore.stats?.coun_comments || 0 }}</span>
-            </p>
-          </div>
-        </div>
-        <!--        <div-->
-        <!--          class="skeleton-animation"-->
-        <!--        ></div>-->
-      </div>
+      <UserStats />
+
       <div class="AccountView__tabsContainer block-container">
         <UiTabs
-          v-if="isAuthUser"
+          v-if="userStore.isAuthUser"
           v-model="activeTab"
           theme="dark"
           :tabs="tabs"
         />
-        <div
-          v-if="isAuthUser"
-          class="AccountView__favoriteList"
-        >
-          <AnimeCardList :data="userStore.favoriteAnimeList" />
-        </div>
+        <UserFavorites />
       </div>
     </div>
   </div>
@@ -164,24 +119,11 @@
     border-radius: 5px;
     background: linear-gradient(90deg, rgba(140, 83, 253, 1), rgba(83.55731964111328, 49.53755187988281, 151, 1) 70%);
   }
-  .line {
-    width: 100%;
-    height: 0;
-    display: block;
-    border: var(--border) var(--color-gray-82-20);
-    margin: 60px 0;
-  }
-  .AccountView__StatsItemText {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-  }
   .AccountView {
     position: relative;
     z-index: 1;
     padding-bottom: fluid(120, 60);
   }
-
   .AccountView__contentContainer {
     margin-top: -90px;
     display: grid;
@@ -194,7 +136,6 @@
       'stats tabs'
       '. tabs';
   }
-
   .AccountView__user {
     background-color: var(--theme-block-bg);
     padding: 30px;
@@ -208,7 +149,6 @@
     flex-direction: column;
     gap: fluid(20, 10);
   }
-
   .AccountView__userInfo {
     display: flex;
     flex-direction: column;
@@ -221,7 +161,6 @@
       font-weight: 500;
     }
   }
-
   .AccountView__userBtns {
     display: flex;
     gap: fluid(30, 15);
@@ -232,14 +171,12 @@
       opacity: 0.3;
     }
   }
-
   .AccountView__favoriteList {
     display: flex;
     flex-wrap: wrap;
     padding-top: fluid(35, 20);
     gap: fluid(35, 20);
   }
-
   .AccountView__userBtn {
     width: 48px;
     height: 48px;
@@ -255,7 +192,6 @@
       color: white;
     }
   }
-
   .AccountView__userBtn {
     &.active {
       svg {
@@ -265,7 +201,6 @@
       border-color: var(--color-primary);
     }
   }
-
   .AccountView__userAvatar {
     width: 130px;
     height: 130px;
@@ -280,44 +215,6 @@
       object-fit: cover;
     }
   }
-
-  .AccountView__Stats {
-    background-color: var(--theme-block-bg);
-    height: 359px;
-    max-width: 100%;
-    grid-area: stats;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: fluid(30, 20);
-    color: var(--theme-text);
-    &.is_hidden {
-      display: none;
-    }
-
-    p {
-      width: 100%;
-      display: flex;
-      font-weight: 500;
-      justify-content: space-between;
-
-      span {
-        color: #b17eff;
-      }
-
-      &:last-child {
-        margin-top: 10px;
-      }
-    }
-  }
-
-  .AccountView__StatsTitle {
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 24px;
-    margin-bottom: 30px;
-  }
-
   .AccountView__tabsContainer {
     background-color: var(--theme-block-bg);
 
@@ -328,7 +225,6 @@
     height: 100%;
     grid-area: tabs;
   }
-
   .AccountView__cover {
     position: relative;
     z-index: -1;

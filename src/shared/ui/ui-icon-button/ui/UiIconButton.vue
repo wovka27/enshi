@@ -32,7 +32,7 @@
     flex-shrink: 0;
     width: var(--w, 50px);
     aspect-ratio: 1;
-    background-color: var(--color-dark-1f);
+    background-color: var(--color-dark-16-80);
     border: var(--border) var(--color-gray-82-20);
     border-radius: var(--border-radius-10);
     transition-property: border-color, color;
@@ -41,13 +41,12 @@
       height: auto;
     }
     &.is-theme {
-      background-color: var(--theme-bg);
+      background-color: var(--theme-block-bg);
       color: var(--theme-text);
     }
 
     @include hover {
       border-color: var(--color-gray-82);
-      color: var(--color-white-40);
     }
   }
 </style>

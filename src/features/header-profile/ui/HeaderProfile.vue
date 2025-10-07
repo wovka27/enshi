@@ -98,7 +98,7 @@
     outline: none;
     border: 1px solid var(--color-gray-82-20);
     border-radius: 10px;
-    background: rgb(31, 30, 35);
+    background: var(--theme-block-bg);
   }
 
   @media screen and (max-width: 1200px) {

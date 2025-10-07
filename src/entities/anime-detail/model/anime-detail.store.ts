@@ -21,6 +21,7 @@ interface State {
   };
   hasFavorite: boolean;
   estimation: IEstimation | null;
+  episodeIndex: number;
 }
 
 export const useAnimeDetailStore = defineStore('anime-detail', {
@@ -45,7 +46,12 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
     },
     hasFavorite: false,
     estimation: null,
+    episodeIndex: 0,
   }),
+
+  getters: {
+    currentEpisode: (state: State) => state.episodes[state.episodeIndex],
+  },
 
   actions: {
     setSelectedEpisode(value: unknown) {
@@ -61,7 +67,9 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
     setCommentPagination(key: keyof ICommentsResponseData['pagination'], value: number) {
       this.comments.pagination = { ...this.comments.pagination, [key]: value };
     },
-
+    setEpisodeIndex(val: number) {
+      this.episodeIndex = val;
+    },
     async getData(id: string) {
       this.data = await animeDetailService.getData(id);
 

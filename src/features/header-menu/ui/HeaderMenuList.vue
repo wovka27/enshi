@@ -39,13 +39,13 @@
         {{ item.label }}
       </router-link>
     </li>
-    <li
-      v-if="userStore.user && userStore.token"
-      class="HeaderMenuItem HeaderMenuItem--theme"
-      @click="logout"
-    >
-      Выйти
-    </li>
+    <!--    <li-->
+    <!--      v-if="userStore.user && userStore.token"-->
+    <!--      class="HeaderMenuItem HeaderMenuItem&#45;&#45;theme"-->
+    <!--      @click="logout"-->
+    <!--    >-->
+    <!--      Выйти-->
+    <!--    </li>-->
     <li
       class="HeaderMenuItem HeaderMenuItem--theme visible-mobile-s"
       @click="themeStore.changeTheme"

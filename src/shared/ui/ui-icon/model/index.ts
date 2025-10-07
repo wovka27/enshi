@@ -20,6 +20,7 @@ export type IconTypeName =
   | 'back'
   | 'fullscreen'
   | 'film'
+  | 'reload'
   | 'burger'
   | 'close'
   | 'success'

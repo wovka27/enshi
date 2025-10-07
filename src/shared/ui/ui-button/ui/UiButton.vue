@@ -1,21 +1,13 @@
 <script setup lang="ts">
   import type { RouterLinkProps } from 'vue-router';
 
-  type ButtonType =
-    | 'outline'
-    | 'primary'
-    | 'danger'
-    | 'success'
-    | 'warning'
-    | 'outline-small'
-    | 'primary-small'
-    | 'danger';
+  type ButtonType = 'outline' | 'primary' | 'success' | 'warning' | 'outline-small' | 'primary-small' | 'danger';
 
   interface IUiButtonProps {
     btnType: ButtonType;
     type?: HTMLButtonElement['type'];
     to?: RouterLinkProps['to'];
-    size?: 'small' | 'medium' | 'large';
+    size?: 'small' | 'medium' | 'large' | 'small-icon' | 'medium-icon' | 'large-icon';
     disabled?: boolean;
     wContent?: boolean;
   }
@@ -92,15 +84,27 @@
       --color-gradient-alpha 0.2s;
 
     &.small {
-      padding: 4px 8px;
+      padding: 4px 16px;
+    }
+
+    &.small-icon {
+      padding: 4px;
     }
 
     &.medium {
       padding: fluid(12, 11) 24px;
     }
 
+    &.medium-icon {
+      padding: fluid(12, 11);
+    }
+
     &.large {
       padding: fluid(18, 14) 28px;
+    }
+
+    &.large-icon {
+      padding: fluid(18, 14);
     }
 
     &.w-content {

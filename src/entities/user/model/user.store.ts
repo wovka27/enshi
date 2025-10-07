@@ -28,12 +28,12 @@ export const useUserStore = defineStore('user', {
       return (id: string) => state.user?.id === id;
     },
     favoriteAnimeList: (state) => state.favorites.map((i) => i.anime),
+    isAuthUser: (state) => state.localUser && state.user && state.localUser.id === state.user.id,
   },
 
   actions: {
-    setUser(data: IUser) {
+    setUser(data: IUser | null) {
       this.user = data;
-      storageUser.set(data);
     },
     setLocalUser(data: IUser) {
       this.localUser = data;
@@ -42,13 +42,17 @@ export const useUserStore = defineStore('user', {
 
     setToken(data: string) {
       this.token = data;
-      CookieHelper.set('access_token', data);
+      CookieHelper.set('access_token', data, {
+        path: '/',
+        secure: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
     },
 
     async reset() {
       storageUser.remove();
       CookieHelper.delete('access_token');
-      this.user = null;
+      this.setUser(null);
       this.token = '';
     },
 
@@ -67,15 +71,14 @@ export const useUserStore = defineStore('user', {
     async getData(id: number) {
       if (this.user?.id == id) return;
       const response = await userService.getData(id);
-      this.user = response!;
+      this.setUser(response!);
     },
 
     async getFavorites() {
+      if (this.favorites.length) return;
       const response = await animeDetailService.getFavorites();
 
       this.favorites = response!.data;
-
-      console.log(this.favorites);
     },
 
     async getStats(id: number) {

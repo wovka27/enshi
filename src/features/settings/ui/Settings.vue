@@ -50,7 +50,8 @@
 <template>
   <section class="Settings container">
     <form
-      class="Settings__container"
+      inert
+      class="Settings__container fix"
       @submit.prevent="submit"
     >
       <header class="Settings__header">
@@ -71,6 +72,7 @@
           </div>
         </div>
         <UiButton
+          :to="{ name: 'profile', params: { id: userStore.localUser?.id } }"
           w-content
           btn-type="outline"
         >

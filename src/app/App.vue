@@ -7,3 +7,22 @@
   <BaseLayout />
   <AppToast />
 </template>
+
+<style lang="scss">
+  .fix {
+    position: relative;
+    overflow: hidden;
+
+    &:before {
+      pointer-events: none;
+      background-color: var(--theme-block-bg);
+      z-index: 10;
+      content: 'На доработке';
+      position: absolute;
+      inset: 0;
+      font-size: calc(100% + 2rem);
+      color: var(--theme-text);
+      @include flex-center();
+    }
+  }
+</style>

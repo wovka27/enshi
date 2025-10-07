@@ -37,7 +37,7 @@
   >
     <button
       class="quality-btn"
-      @click="isOpen = !isOpen"
+      @click.prevent="isOpen = !isOpen"
     >
       {{ currentLabel }}
     </button>

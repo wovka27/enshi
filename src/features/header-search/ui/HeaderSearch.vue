@@ -3,10 +3,13 @@
   import { fetchSearch } from '@features/header-search/api';
   import type { ISearchResponseItem } from '@features/header-search/model';
   import SearchRemoteListItem from '@features/header-search/ui/SearchRemoteListItem.vue';
+  import { useClickOutside } from '@shared/lib/composables/click-outside.ts';
   import { useMatchMedia } from '@shared/lib/composables/match-media';
   import { debounce } from '@shared/lib/utils';
 
-  const inputRef = ref<HTMLInputElement | null>(null);
+  const inputRef = useClickOutside(() => {
+    form.name = '';
+  });
   const formRef = ref<HTMLElement>();
   const list = ref<ISearchResponseItem[]>([]);
 
@@ -92,8 +95,9 @@
   </form>
   <UiDropdown
     v-model="isOpen"
-    :target="formRef"
+    :width="320"
     is-full-width
+    :target="formRef"
     :is-drop-header="isDropHeader"
   >
     <SearchRemoteListItem

@@ -35,7 +35,6 @@
     }
 
     if (response.ok && response.data.success) {
-      console.log('hui');
       user.setLocalUser(response.data.data.user);
       user.setToken(response.data.data.access_token);
 

@@ -31,25 +31,39 @@
 
     const { width: targetWidth, left, right, bottom } = rect;
 
-    const dropdownWidth =
-      props.width === 'full' ? targetWidth : typeof props.width === 'number' ? props.width : dropdownEl.offsetWidth;
+    // === Вычисление ширины ===
+    let dropdownWidth: number;
 
-    // Вычисляем стандартную позицию (по левому краю)
+    if (props.width === 'full') {
+      dropdownWidth = targetWidth;
+    } else if (typeof props.width === 'number') {
+      dropdownWidth = props.width;
+    } else {
+      // Берём реальную ширину, но ограничиваем экраном
+      dropdownWidth = dropdownEl.offsetWidth || targetWidth;
+      dropdownWidth = Math.min(dropdownWidth, window.innerWidth - 20);
+    }
+
+    // === Позиционирование ===
     let computedLeft = left + window.scrollX;
     const computedTop = props.isDropHeader
       ? parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 60
       : bottom + window.scrollY + 10;
 
-    // Проверяем, не вылезает ли dropdown за пределы окна
     const spaceRight = window.innerWidth - (computedLeft + dropdownWidth + 10);
     const spaceLeft = computedLeft - 10;
 
+    // Если не помещается справа — выравниваем по правому краю target
     if (spaceRight < 0 && spaceLeft > 0) {
-      // если не помещается справа — позиционируем по правому краю target
       computedLeft = right + window.scrollX - dropdownWidth;
     }
 
-    // Мобильная версия
+    // Если всё равно вылезает за экран влево
+    if (computedLeft < 10) {
+      computedLeft = 10;
+    }
+
+    // === Для мобилок ===
     if (window.innerWidth <= 768 && props.isFullWidth) {
       styles.value = {
         position: 'fixed',

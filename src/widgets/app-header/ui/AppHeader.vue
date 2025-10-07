@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useHideAppHeader } from '@widgets/app-header/lib';
   import HeaderMenu from '@features/header-menu';
+  import HeaderNotification from '@features/header-notification';
   import HeaderProfile from '@features/header-profile';
   import HeaderSearch from '@features/header-search';
   import HeaderThemeButton from '@features/header-theme-button/ui/HeaderThemeButton.vue';
@@ -25,10 +26,7 @@
 
         <div class="AppHeader-flex">
           <HeaderThemeButton />
-          <UiIconButton
-            :size="48"
-            icon-name="notification"
-          />
+          <HeaderNotification />
           <HeaderProfile />
         </div>
       </div>
