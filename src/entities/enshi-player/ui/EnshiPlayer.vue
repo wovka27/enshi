@@ -124,7 +124,7 @@
     qualityIndex.value = 0;
   });
 
-  defineExpose({ value: playerRef });
+  defineExpose({ value: playerRef, toggleFullscreen });
 </script>
 
 <template>

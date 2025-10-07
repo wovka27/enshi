@@ -26,7 +26,7 @@
         height="677"
       />
       <span style="display: flex; flex-direction: column; justify-content: space-between">
-        <h4 class>{{ item.title }}</h4>
+        <p class>{{ item.title }}</p>
         <span style="display: flex; gap: 20px; justify-content: space-between">
           <strong style="display: flex; gap: 3px; align-items: center">
             <UiImage
@@ -45,6 +45,7 @@
 
 <style lang="scss">
   .SearchRemoteListItem {
+    position: relative;
     color: var(--color-white);
   }
 

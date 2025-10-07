@@ -1,12 +1,14 @@
 <script setup lang="ts">
+  import { useAuthStore } from '@entities/auth/model/auth.store.ts';
   import { useUserStore } from '@entities/user/model';
 
   const userStore = useUserStore();
+  const authStore = useAuthStore();
 </script>
 
 <template>
   <router-link
-    v-if="userStore.isAuth"
+    v-if="authStore.isAuthenticated"
     :to="`/user/${userStore.localUser?.id}/profile`"
     class="HeaderProfile hidden-mobile-s"
   >

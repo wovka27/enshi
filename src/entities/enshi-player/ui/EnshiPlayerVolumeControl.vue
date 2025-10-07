@@ -107,6 +107,7 @@
     }
 
     &__slider-wrap {
+      width: inherit;
       position: absolute;
       bottom: calc(100% + 10px);
       left: 50%;

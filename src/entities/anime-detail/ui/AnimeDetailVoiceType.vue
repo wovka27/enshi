@@ -10,6 +10,7 @@
   const handleUpdate = async (value: string) => {
     animeDetailStore.setSelectedVoiceType(value);
     await animeDetailStore.getEpisodes(+route.params.id as number, +value);
+    animeDetailStore.setEpisodeIndex(0);
   };
 
   const isShow = computed(() => animeDetailStore.voices.length && animeDetailStore.selectedPlayerType === 'enshi');
