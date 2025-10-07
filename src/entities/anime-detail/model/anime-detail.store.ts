@@ -12,8 +12,8 @@ interface State {
   allEpisodes: unknown[];
   voices: { value: string; label: string }[];
   selectedPlayerType: 'kodik' | 'enshi';
-  selectedVoiceType: unknown;
-  selectedEpisode: unknown;
+  selectedVoiceType: number | null;
+  selectedEpisode: IEpisode | null;
   comments: {
     data: IComment[];
     count: ICommentsResponseData['data']['countComments'];
@@ -54,11 +54,11 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
   },
 
   actions: {
-    setSelectedEpisode(value: unknown) {
+    setSelectedEpisode(value: IEpisode) {
       this.selectedEpisode = value;
       this.getAllEpisodes();
     },
-    setSelectedVoiceType(value: unknown) {
+    setSelectedVoiceType(value: number) {
       this.selectedVoiceType = value;
     },
     setSelectedPlayerType(value: 'kodik' | 'enshi') {
@@ -72,12 +72,14 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
       this.setSelectedEpisode(this.currentEpisode);
     },
     nextEpisode() {
+      if (this.episodeIndex >= this.episodes.length - 1) return;
       this.setEpisodeIndex(this.episodeIndex + 1);
     },
     prevEpisode() {
+      if (this.episodeIndex <= 0) return;
       this.setEpisodeIndex(this.episodeIndex - 1);
     },
-    async getData(id: string) {
+    async getData(id: number) {
       this.data = await animeDetailService.getData(id);
 
       if (this.data.enshi_player) {
@@ -87,10 +89,10 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
     async getVoices(id: number) {
       this.voices = await animeDetailService.getVoices(id);
     },
-    async getComments(id: string, page?: number) {
+    async getComments(id: number, page?: number) {
       this.comments = await animeDetailService.getComments(id, page);
     },
-    async getMoreComments(id: string, page?: number) {
+    async getMoreComments(id: number, page?: number) {
       const response = await animeDetailService.getComments(id, page);
 
       this.comments.pagination = response.pagination;
@@ -105,8 +107,8 @@ export const useAnimeDetailStore = defineStore('anime-detail', {
       const videoStore = useVideoStore();
 
       this.allEpisodes = await animeDetailService.getAllEpisodes(
-        this.data.id,
-        this.selectedVoiceType,
+        this.data!.id,
+        this.selectedVoiceType!,
         this.selectedEpisode!.series_number
       );
       videoStore.setQuality(this.allEpisodes.map((i) => ({ value: i.quality.name, label: `${i.quality.name}p` })));

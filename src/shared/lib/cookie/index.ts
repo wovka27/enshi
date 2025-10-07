@@ -10,6 +10,7 @@ export default class CookieHelper {
       sameSite?: 'Strict' | 'Lax' | 'None';
     } = {}
   ) {
+    console.log('HUI');
     let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
 
     if (options.maxAge && !isNaN(parseInt(options.maxAge.toString()))) {

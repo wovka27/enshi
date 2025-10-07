@@ -3,7 +3,7 @@
 
   const toastStore = useToastStore();
 
-  const handleClose = (id: string) => {
+  const handleClose = (id: number) => {
     toastStore.deleteItemById(id);
   };
   const handlePause = (toast: ToastWithMeta) => {

@@ -5,7 +5,7 @@ import type {
 import { client } from '@shared/api';
 
 class AnimeCommentService {
-  async getComments(id: string, page: number = 1) {
+  async getComments(id: number, page: number = 1) {
     const response = await client.get<ICommentsResponseData, TransformResponseData>({
       url: `anime/${id}/comments`,
       axiosConfig: { params: { page } },
@@ -34,7 +34,7 @@ class AnimeCommentService {
     const response = await client.post<
       ICommentsResponseData,
       TransformResponseData,
-      { answer: string; comment_id: string }
+      { answer: string; comment_id: number }
     >({
       url: 'anime/comments',
       payload: { comment, anime_id },
@@ -45,7 +45,7 @@ class AnimeCommentService {
     const response = await client.post<
       ICommentsResponseData,
       TransformResponseData,
-      { answer: string; comment_id: string }
+      { answer: string; comment_id: number }
     >({
       url: 'anime/comments/answer',
       payload: { answer, comment_id },

@@ -8,7 +8,7 @@
 
 <template>
   <router-link
-    v-if="authStore.isAuthenticated"
+    v-if="userStore.isAuth"
     :to="`/user/${userStore.localUser?.id}/profile`"
     class="HeaderProfile hidden-mobile-s"
   >

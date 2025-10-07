@@ -13,7 +13,6 @@ export interface IAnimeCardProps {
 }
 
 export interface IBaseAnimeData extends Pick<IEntity, 'id'> {
-  id: string;
   title: string;
   year: number;
   poster_url: string | null;

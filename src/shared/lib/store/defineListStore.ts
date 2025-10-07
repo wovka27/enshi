@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 interface ListStoreOptions<T> {
-  id: string;
+  id: number;
   fetcher: (id?: string) => Promise<T[]>;
 }
 

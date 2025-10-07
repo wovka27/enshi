@@ -73,6 +73,17 @@
     playerRef.value?.onVolumeChange(val);
   };
 
+  const onError = (value: { codeError: string; error: string }) => {
+    switch (value.codeError) {
+      case 'VIDEO.MEDIA_ERR_SRC_NOT_SUPPORTED':
+        changeCurrentQuality();
+        if (qualityIndex.value >= qualityValues.value.length - 1) setError('Видео не воспроизводится');
+        break;
+      default:
+        return;
+    }
+  };
+
   const setError = (text: string) => {
     if (errorRegistry.value.timer) clearTimeout(errorRegistry.value.timer);
     errorRegistry.value = { text };
@@ -86,17 +97,6 @@
     if (qualityIndex.value >= qualityValues.value.length - 1) return;
     qualityIndex.value++;
     store.setCurrentQuality(currentQualityValue.value);
-  };
-
-  const onError = (value: { codeError: string; error: string }) => {
-    switch (value.codeError) {
-      case 'VIDEO.MEDIA_ERR_SRC_NOT_SUPPORTED':
-        changeCurrentQuality();
-        if (qualityIndex.value >= qualityValues.value.length - 1) setError('Видео не воспроизводится');
-        break;
-      default:
-        return;
-    }
   };
 
   const handleEnd = async () => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useSwiper } from 'swiper/vue';
 
-  defineProps<{ id: string }>();
+  defineProps<{ id: number }>();
   const swiper = useSwiper();
 </script>
 

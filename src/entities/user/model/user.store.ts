@@ -43,11 +43,6 @@ export const useUserStore = defineStore('user', {
 
     setToken(data: string) {
       this.token = data;
-      CookieHelper.set('access_token', data, {
-        path: '/',
-        secure: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-      });
     },
 
     async reset() {

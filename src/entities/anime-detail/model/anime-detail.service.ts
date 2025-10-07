@@ -10,7 +10,7 @@ import type { IFavoriteResponse } from '@entities/favorite/model';
 import { client } from '@shared/api';
 
 class AnimeDetailService {
-  async getData(id: string) {
+  async getData(id: number) {
     const response = await client.get<IAnimeDetailResponseData, IAnimeDetail | null, undefined>({
       url: `anime/${id}`,
       defaultValue: null,
@@ -41,7 +41,7 @@ class AnimeDetailService {
     return response.data!;
   }
   async getVoices(id: number) {
-    const response = await client.get<IEntity[], { value: string; label: string }[], undefined>({
+    const response = await client.get<IEntity[], { value: number; label: string }[], undefined>({
       url: `anime/${id}/voices`,
       defaultValue: [],
       transform: (data) =>
@@ -53,7 +53,7 @@ class AnimeDetailService {
 
     return response.data!;
   }
-  async getComments(id: string, page?: number) {
+  async getComments(id: number, page?: number) {
     return await animeCommentService.getComments(id, page);
   }
   async getFavorites() {

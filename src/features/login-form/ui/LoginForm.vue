@@ -4,6 +4,7 @@
   import { toast } from '@entities/app-toast/lib';
   import authService from '@entities/auth/model/auth.service.ts';
   import { useUserStore } from '@entities/user/model';
+  import CookieHelper from '@shared/lib/cookie';
 
   const router = useRouter();
   const form = useLoginForm();
@@ -37,6 +38,8 @@
     if (response.ok && response.data.success) {
       user.setLocalUser(response.data.data.user);
       user.setToken(response.data.data.access_token);
+
+      CookieHelper.set('access_token', response.data.data.access_token);
 
       if (router.currentRoute.value.query?.redirect) {
         await router.replace(router.currentRoute.value.query.redirect as string);

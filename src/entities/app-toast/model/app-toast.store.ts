@@ -9,7 +9,7 @@ interface ToastMeta {
 }
 
 export interface ToastWithMeta extends IToastItem {
-  id: string;
+  id: number;
   _meta: ToastMeta;
 }
 
@@ -44,7 +44,7 @@ export const useToastStore = defineStore('toast', {
       this.list.shift();
     },
 
-    deleteItemById(id: string) {
+    deleteItemById(id: number) {
       const index = this.list.findIndex((t) => t.id === id);
       if (index !== -1) {
         const toast = this.list[index];
